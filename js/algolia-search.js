@@ -1,36 +1,30 @@
 /* global instantsearch, CONFIG */
-
 $(document).ready(function() {
   var algoliaSettings = CONFIG.algolia;
   var isAlgoliaSettingsValid = algoliaSettings.applicationID
                             && algoliaSettings.apiKey
                             && algoliaSettings.indexName;
-
   if (!isAlgoliaSettingsValid) {
     window.console.error('Algolia Settings are invalid.');
     return;
   }
-
   var search = instantsearch({
     appId         : algoliaSettings.applicationID,
     apiKey        : algoliaSettings.apiKey,
     indexName     : algoliaSettings.indexName,
     searchFunction: function(helper) {
       var searchInput = $('#algolia-search-input').find('input');
-
       if (searchInput.val()) {
         helper.search();
       }
     }
   });
-
   // Registering Widgets
   [
     instantsearch.widgets.searchBox({
       container  : '#algolia-search-input',
       placeholder: algoliaSettings.labels.input_placeholder
     }),
-
     instantsearch.widgets.hits({
       container  : '#algolia-hits',
       hitsPerPage: algoliaSettings.hits.per_page || 10,
@@ -55,7 +49,6 @@ $(document).ready(function() {
         item: 'algolia-hit-item'
       }
     }),
-
     instantsearch.widgets.stats({
       container: '#algolia-stats',
       templates: {
@@ -73,7 +66,6 @@ $(document).ready(function() {
         }
       }
     }),
-
     instantsearch.widgets.pagination({
       container    : '#algolia-pagination',
       scrollTo     : false,
@@ -93,9 +85,7 @@ $(document).ready(function() {
       }
     })
   ].forEach(search.addWidget, search);
-
   search.start();
-
   $('.popup-trigger').on('click', function(e) {
     e.stopPropagation();
     $('body')
@@ -104,11 +94,9 @@ $(document).ready(function() {
     $('.popup').toggle();
     $('#algolia-search-input').find('input').focus();
   });
-
   $('.popup-btn-close').click(function() {
     $('.popup').hide();
     $('.algolia-pop-overlay').remove();
     $('body').css('overflow', '');
   });
-
 });

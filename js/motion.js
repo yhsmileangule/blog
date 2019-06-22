@@ -1,8 +1,6 @@
 /* global NexT, CONFIG */
-
 $(document).ready(function() {
   NexT.motion = {};
-
   var sidebarToggleLines = {
     lines: [],
     push : function(line) {
@@ -24,7 +22,6 @@ $(document).ready(function() {
       });
     }
   };
-
   function SidebarToggleLine(settings) {
     this.el = $(settings.el);
     this.status = $.extend({}, {
@@ -37,7 +34,6 @@ $(document).ready(function() {
       }
     }, settings.status);
   }
-
   SidebarToggleLine.prototype.init = function() {
     this.transform('init');
   };
@@ -50,7 +46,6 @@ $(document).ready(function() {
   SidebarToggleLine.prototype.transform = function(status) {
     this.el.velocity('stop').velocity(this.status[status]);
   };
-
   var sidebarToggleLine1st = new SidebarToggleLine({
     el    : '.sidebar-toggle-line-first',
     status: {
@@ -72,15 +67,12 @@ $(document).ready(function() {
       close: {width: '100%', rotateZ: '45deg', top: '-5px'}
     }
   });
-
   sidebarToggleLines.push(sidebarToggleLine1st);
   sidebarToggleLines.push(sidebarToggleLine2nd);
   sidebarToggleLines.push(sidebarToggleLine3rd);
-
   var SIDEBAR_WIDTH = CONFIG.sidebar.width ? CONFIG.sidebar.width : '320px';
   var SIDEBAR_DISPLAY_DURATION = 200;
   var xPos, yPos;
-
   var sidebarToggleMotion = {
     toggleEl        : $('.sidebar-toggle'),
     dimmerEl        : $('#sidebar-dimmer'),
@@ -94,7 +86,6 @@ $(document).ready(function() {
       this.sidebarEl.on('touchstart', this.touchstartHandler.bind(this));
       this.sidebarEl.on('touchend', this.touchendHandler.bind(this));
       this.sidebarEl.on('touchmove', function(e) { e.preventDefault(); });
-
       $(document)
         .on('sidebar.isShowing', function() {
           NexT.utils.isDesktop() && $('body').velocity('stop').velocity(
@@ -134,9 +125,7 @@ $(document).ready(function() {
     },
     showSidebar: function() {
       var self = this;
-
       sidebarToggleLines.close();
-
       this.sidebarEl.velocity('stop').velocity({
         width: SIDEBAR_WIDTH
       }, {
@@ -165,19 +154,15 @@ $(document).ready(function() {
           self.sidebarEl.trigger('sidebar.didShow');
         }
       });
-
       this.sidebarEl.trigger('sidebar.isShowing');
     },
     hideSidebar: function() {
       NexT.utils.isDesktop() && $('body').velocity('stop').velocity({paddingRight: 0});
       this.sidebarEl.find('.motion-element').velocity('stop').css('display', 'none');
       this.sidebarEl.velocity('stop').velocity({width: 0}, {display: 'none'});
-
       sidebarToggleLines.init();
-
       this.sidebarEl.removeClass('sidebar-active');
       this.sidebarEl.trigger('sidebar.isHiding');
-
       // Prevent adding TOC to Overview if Overview was selected when close & open sidebar.
       if ($('.post-toc-wrap')) {
         if ($('.site-overview-wrap').css('display') === 'block') {
@@ -189,7 +174,6 @@ $(document).ready(function() {
     }
   };
   sidebarToggleMotion.init();
-
   NexT.motion.integrator = {
     queue : [],
     cursor: -1,
@@ -206,7 +190,6 @@ $(document).ready(function() {
       this.next();
     }
   };
-
   NexT.motion.middleWares = {
     logo: function(integrator) {
       var sequence = [];
@@ -216,13 +199,11 @@ $(document).ready(function() {
       var $subtitle = $('.site-subtitle');
       var $logoLineTop = $('.logo-line-before i');
       var $logoLineBottom = $('.logo-line-after i');
-
       $brand.length > 0 && sequence.push({
         e: $brand,
         p: {opacity: 1},
         o: {duration: 200}
       });
-
       /**
        * Check if $elements exist.
        * @param {jQuery|Array} $elements
@@ -234,7 +215,6 @@ $(document).ready(function() {
           return $element.length > 0;
         });
       }
-
       function getMistLineSettings(element, translateX) {
         return {
           e: $(element),
@@ -245,7 +225,6 @@ $(document).ready(function() {
           }
         };
       }
-
       function pushImageToSequence() {
         sequence.push({
           e: $image,
@@ -253,33 +232,26 @@ $(document).ready(function() {
           o: {duration: 200}
         });
       }
-
       NexT.utils.isMist() && hasElement([$logoLineTop, $logoLineBottom])
       && sequence.push(
         getMistLineSettings($logoLineTop, '100%'),
         getMistLineSettings($logoLineBottom, '-100%')
       );
-
       NexT.utils.isMuse() && hasElement($image) && pushImageToSequence();
-
       hasElement($title) && sequence.push({
         e: $title,
         p: {opacity: 1, top: 0},
         o: {duration: 200}
       });
-
       hasElement($subtitle) && sequence.push({
         e: $subtitle,
         p: {opacity: 1, top: 0},
         o: {duration: 200}
       });
-
       (NexT.utils.isPisces() || NexT.utils.isGemini()) && hasElement($image) && pushImageToSequence();
-
       if (CONFIG.motion.async) {
         integrator.next();
       }
-
       if (sequence.length > 0) {
         sequence[sequence.length - 1].o.complete = function() {
           integrator.next();
@@ -291,13 +263,10 @@ $(document).ready(function() {
         integrator.next();
       }
     },
-
     menu: function(integrator) {
-
       if (CONFIG.motion.async) {
         integrator.next();
       }
-
       $('.menu-item').velocity('transition.slideDownIn', {
         display : null,
         duration: 200,
@@ -306,9 +275,7 @@ $(document).ready(function() {
         }
       });
     },
-
     postList: function(integrator) {
-
       //var $post = $('.post');
       var $postBlock = $('.post-block, .pagination, .comments');
       var $postBlockTransition = CONFIG.motion.transition.post_block;
@@ -321,7 +288,6 @@ $(document).ready(function() {
       var $sidebarAffix = $('.sidebar-inner');
       var $sidebarAffixTransition = CONFIG.motion.transition.sidebar;
       var hasPost = $postBlock.length > 0;
-
       function postMotion() {
         var postMotionOptions = window.postMotionOptions || {
           stagger: 100,
@@ -334,7 +300,6 @@ $(document).ready(function() {
           }
           integrator.next();
         };
-
         //$post.velocity('transition.slideDownIn', postMotionOptions);
         if (CONFIG.motion.transition.post_block) {
           $postBlock.velocity('transition.' + $postBlockTransition, postMotionOptions);
@@ -353,14 +318,11 @@ $(document).ready(function() {
           $sidebarAffix.velocity('transition.' + $sidebarAffixTransition, postMotionOptions);
         }
       }
-
       hasPost ? postMotion() : integrator.next();
-
       if (CONFIG.motion.async) {
         integrator.next();
       }
     },
-
     sidebar: function(integrator) {
       if (CONFIG.sidebar.display === 'always') {
         NexT.utils.displaySidebar();
@@ -368,5 +330,4 @@ $(document).ready(function() {
       integrator.next();
     }
   };
-
 });
