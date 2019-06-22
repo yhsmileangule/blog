@@ -72,5 +72,6 @@ theme: next
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repo: https://github.com/yhsmileangule/blog.git
+  # repo: https://github.com/yhsmileangule/blog.git
+  repo: https://yhsmileangule.github.io/blog/
   branch: master
